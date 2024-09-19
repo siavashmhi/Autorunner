@@ -1,33 +1,37 @@
+# Step 1: create runner directory 
 - name: Ensure ansible-runner directory exists
   file:
-    path: /opt/ansible-runner
+    path: /opt/runner
     state: directory
     mode: '0755'
 
-# Step 1: create docker volume and docker network 
+# Step 2: create docker volume 
 - name: Create Docker volume
   docker_volume:
     name: runner-config
     driver: local
     state: present
 
+# Step 3: create docker network 
 - name: Create Docker network
   docker_network:
     name: runner_net
     driver: bridge
     state: present
 
-# Step 2: copy docker compose file for gitlab runner 
+# Step 4: copy docker compose file for gitlab runner 
 - name: copy docker compose file
   template:
     src: "./templates/docker-compose.yml.j2"
-    dest: "/opt/ansible-runner/docker-compose.yml"
+    dest: "/opt/runner/docker-compose.yml"
 
+# Step 5: run gitlab runner docker compose file. 
 - name: run docker compose file 
-  command: docker compose -f /opt/ansible-runner/docker-compose.yml up -d
+  command: docker compose -f /opt/runner/docker-compose.yml up -d
   args:
-    chdir: /opt/ansible-runner
+    chdir: /opt/runner
 
+# Step 6: register gitlab runner. 
 - name: Register the GitLab Runner with GitLab using docker exec
   command: docker exec -it "{{ gitlab_runner_name }}" gitlab-runner register
     --non-interactive --url "{{ gitlab_instance_url }}"
@@ -37,11 +41,13 @@
     --description "{{ runner_description }}"
     --tag-list "{{ runner_tag }}"
 
+# Step 7: change gitlab runner config.
 - name: Replace volumes line in config.toml
   ansible.builtin.replace:
     path: /var/lib/docker/volumes/runner-config/_data/config.toml
     regexp: 'volumes = \["/cache"\]'
     replace: 'volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]'
 
+# Step 8: restart gitlab runner docker container
 - name: restart runner container after change conifg.toml config file.
   command: docker restart "{{ gitlab_runner_name }}"
