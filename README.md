@@ -6,12 +6,12 @@ This project provides an Ansible role to set up a GitLab Runner using Docker Com
 
 ## Prerequisites
 
-- **Docker** is installed on the target server where the GitLab Runner will be set up.
+- **Install Docker:** Ensure Docker is installed on your GitLab Runner server.
 
-- **Ansible** installed on your system.
+- **Ansible:** Ensure Ansible is installed on your system.
 
-- **GitLab Registration Token** from your GitLab instance. You can obtain this token from the **CI/CD settings** of your GitLab project.
-- **SSH -**  You have ssh access to your GitLab Runner server 
+- **GitLab Registration Token-** from your GitLab instance. You can obtain this token from the **CI/CD settings** of your GitLab project.
+- **SSH -**  You should have ssh access to your GitLab Runner server.
 
 ## Setup Instructions
 
