@@ -1,9 +1,9 @@
 gitlab_instance_url: "https://git.tfcoapp.ir/"  # Your GitLab instance URL
-gitlab_register_token: "glrt-hdTiUqfRkc8W4n7EUYUd"  # Replace with your GitLab access token
+gitlab_register_token: "glrt-edh-xCh9ZYhDysEVzeJY"  # Replace with your GitLab access token
 gitlab_runner_image: "gitlab/gitlab-runner:latest"
 gitlab_runner_name: "ansible-runner"
 docker_executor_image: "docker:latest"
 gitlab_runner_docker_config: "/etc/gitlab-runner/config.toml"
 runner_executor: "docker"
 runner_description: "This is main runner for all projects ( register with ansible code )"
-runner_tag: "main_runner"
+runner_tag: "ansible_runner"
