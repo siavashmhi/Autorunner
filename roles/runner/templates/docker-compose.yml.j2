@@ -1,0 +1,21 @@
+version: '3.8'
+
+networks:
+  web_net:
+    external: true
+
+volumes:
+  gitlab-runner-config:
+    name: gitlab-runner-config
+
+services:
+  gitlab-runner:
+    image: {{ gitlab_runner_image }}
+    restart: always
+    container_name: {{ gitlab_runner_name }}
+    hostname: runner-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - gitlab-runner-config:/etc/gitlab-runner
+    networks:
+      - web_net

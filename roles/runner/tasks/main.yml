@@ -1,0 +1,32 @@
+# Step 1: create docker volume and docker network 
+- name: Create Docker volume
+  docker_volume:
+    name: gitlab-runner-config
+    driver: local
+    state: present
+
+- name: Ensure ansible-runner directory exists
+  file:
+    path: /opt/ansible-runner
+    state: directory
+    mode: '0755'
+
+# Step 2: copy docker compose file for gitlab runner 
+- name: copy docker compose file
+  template:
+    src: "./templates/docker-compose.yml.j2"
+    dest: "/opt/ansible-runner/docker-compose.yml"
+
+- name: run docker compose file 
+  command: docker compose -f /opt/ansible-runner/docker-compose.yml up -d
+  args:
+    chdir: /opt/ansible-runner
+
+- name: Register the GitLab Runner with GitLab using docker exec
+  command: docker exec -it "{{ gitlab_runner_name }}" gitlab-runner register
+    --non-interactive --url "{{ gitlab_instance_url }}"
+    --registration-token "{{ gitlab_register_token }}"
+    --executor "{{ runner_executor }}"
+    --docker-image "{{ docker_executor_image }}"
+    --description "{{ runner_description }}"
+    --tag-list "{{ runner_tag }}"
