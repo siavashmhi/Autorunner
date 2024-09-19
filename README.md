@@ -13,6 +13,12 @@ This project provides an Ansible role to set up a GitLab Runner using Docker Com
 - **GitLab Registration Token-** from your GitLab instance. You can obtain this token from the **CI/CD settings** of your GitLab project.
 - **SSH -**  You should have ssh access to your GitLab Runner server.
 
+- **Install the community.docker Collection -** You can install community.docker collection with this command:
+
+```bash
+ansible-galaxy collection install community.docker 
+```
+
 ## Setup Instructions
 
 ### Step 1: Clone the Repository
